@@ -1,5 +1,4 @@
 #include <iostream>
-#include <BinaryHeap.h>
 #include <MinHeap.h>
 
 int main(){
