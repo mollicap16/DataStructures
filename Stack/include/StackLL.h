@@ -20,7 +20,7 @@ public:
   StackLL();
   virtual ~StackLL();
 
-  // This function Pushes value onto the stack. If the stack is at max capacity it will return false. Else it will return true.
+  // This function Pushes a value onto the stack.
   virtual bool Push(int32_t value);
 
   // This function Pops the value off of the top of the stack.
