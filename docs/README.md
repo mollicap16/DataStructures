@@ -1,5 +1,9 @@
-This is a personal implementation of common data structures. The following data structures have been implemented and:
+This is a personal implementation of common data structures. The following data structures have been implemented:
   Linked List
   Stack
   Queue
   Heap
+  Binary Search Tree
+
+Dependencies:
+  googletest
