@@ -149,7 +149,7 @@ TEST(BinarySearchTreeTest, PrintInOrderTree){
   tree.Insert(11);
   tree.Insert(8);
 
-  tree.PrintInOrder();
+  tree.PrintInorder();
 }
 
 TEST(BinarySearchTreeTest, PrintPostOrderTree){

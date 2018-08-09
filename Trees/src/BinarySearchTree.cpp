@@ -163,7 +163,7 @@ void BinarySearchTree::PreorderTraversal(Node *node){
   PreorderTraversal(node->right);
 }
 
-void BinarySearchTree::PrintInOrder(){
+void BinarySearchTree::PrintInorder(){
   std::cout << "Print In Order Tree: \n";
   InorderTraversal(root_);
   std::cout << std::endl;
@@ -327,3 +327,5 @@ bool BinarySearchTree::Delete(int32_t value){
 
   return false;
 }
+
+// Delete Recursively

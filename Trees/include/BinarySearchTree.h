@@ -42,8 +42,8 @@ public:
   // Print the BST in different order
   void PrintLevelOrder();
   void PrintPreorder();
+  void PrintInorder();
   void PrintPostorder();
-  void PrintInOrder();
 
 private:
   void InsertRecursively(Node **root, int32_t value);
