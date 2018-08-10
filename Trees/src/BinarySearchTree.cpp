@@ -1,6 +1,7 @@
 #include <BinarySearchTree.h>
 #include <iostream>
 #include <queue>
+#include <limits>
 
 BinarySearchTree::BinarySearchTree() : root_(nullptr) {}
 
@@ -329,3 +330,53 @@ bool BinarySearchTree::Delete(int32_t value){
 }
 
 // Delete Recursively
+void BinarySearchTree::DeleteRecursively(int32_t value){
+  root_ = DeleteRecursively(root_, value);
+}
+
+Node* BinarySearchTree::DeleteRecursively(Node *root, int32_t value){
+  if (root == NULL) {
+     return NULL;
+  }
+  if (value < root->data) {  // value is in the left sub tree.
+      root->left = DeleteRecursively(root->left, value);
+  } else if (value > root->data) { // data is in the right sub tree.
+      root->right = DeleteRecursively(root->right, value);
+  } else {
+     // case 1: no children
+     if (root->left == NULL && root->right == NULL) {
+        delete(root); // wipe out the memory
+        root = NULL;
+     }
+     // case 2: one child (right)
+     else if (root->left == NULL) {
+        struct Node *temp = root; // save current node as a backup
+        root = root->right;
+        delete temp;
+     }
+     // case 3: one child (left)
+     else if (root->right == NULL) {
+        struct Node *temp = root; // save current node as a backup
+        root = root->left;
+        delete temp;
+     }
+     // case 4: two children
+     else {
+        Node *temp = new Node();
+        temp->data = FindMin(root->right); // find minimal value of right sub tree
+        root->data = temp->data; // duplicate the node
+        root->right = DeleteRecursively(root->right, temp->data); // delete the duplicate node
+     }
+  }
+  return root; // parent node can update reference
+}
+
+int32_t BinarySearchTree::FindMin(Node *root){
+   if (root == NULL) {
+      return std::numeric_limits<int32_t>::max(); // or undefined.
+   }
+   if (root->left != NULL) {
+      return FindMin(root->left); // left tree is smaller
+   }
+   return root->data;
+}

@@ -32,12 +32,15 @@ public:
   // Tree it will return a nullptr
   Node* Search(int32_t value);
 
-  // Same as Search(int32_t value) function above except it performs
-  // the operation recursively
+  // Same as Search(int32_t value) function above except it is
+  // implemented recursively
   Node* SearchRecursively(int32_t value);
 
   // Returns true if the value is in the BST is deleted
   bool Delete(int32_t value);
+
+  // Same as Delete function above except it is implemented recursively
+  void DeleteRecursively(int32_t value);
 
   // Print the BST in different order
   void PrintLevelOrder();
@@ -51,6 +54,8 @@ private:
   void PreorderTraversal(Node *node);
   void InorderTraversal(Node *node);
   void PostorderTraversal(Node *node);
+  Node* DeleteRecursively(Node *root, int32_t value);
+  int32_t FindMin(Node *root);
 
   Node* root_;
 };

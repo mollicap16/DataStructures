@@ -1,0 +1,1 @@
+cmd='C:/Program Files/CMake/bin/cmake.exe;-GCodeBlocks - MinGW Makefiles;C:/Users/pmollica/Documents/Projects/DataStructures/Trees/tests/gtest/src/gtest'

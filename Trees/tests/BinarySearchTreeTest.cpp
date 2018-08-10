@@ -315,6 +315,136 @@ TEST(BinarySearchTreeTest, DeleteNodeWithTwoChildren){
   ASSERT_EQ(return_node->right, nullptr);
 }
 
+TEST(BinarySearchTreeTest, DeleteNodeWithNoChildrenRecursively){
+  BinarySearchTree tree;
+
+  tree.Insert(5);
+
+  tree.PrintLevelOrder();
+  tree.DeleteRecursively(5);
+  tree.PrintLevelOrder();
+  tree.DeleteRecursively(5);
+
+  tree.Insert(5);
+  tree.Insert(3);
+  tree.Insert(4);
+
+  tree.DeleteRecursively(4);
+  Node* return_node = tree.Search(3);
+  ASSERT_EQ(return_node->left, nullptr);
+  ASSERT_EQ(return_node->right, nullptr);
+}
+
+TEST(BinarySearchTreeTest, DeleteNodeWithOneChildRecursively){
+  BinarySearchTree tree;
+
+  tree.Insert(8);
+  tree.Insert(5);
+  tree.Insert(7);
+  tree.Insert(6);
+
+  // Testing the removal of a single child node on the left side of the root node
+  tree.DeleteRecursively(5);
+  Node* return_node = tree.Search(8);
+  ASSERT_EQ(return_node->left->data, 7);
+  ASSERT_EQ(return_node->right, nullptr);
+  tree.DeleteRecursively(7);
+  return_node = tree.Search(8);
+  ASSERT_EQ(return_node->left->data, 6);
+  ASSERT_EQ(return_node->right, nullptr);
+  tree.DeleteRecursively(8);
+  return_node = tree.Search(8);
+  ASSERT_EQ(return_node, nullptr);
+  tree.PrintLevelOrder();
+
+  BinarySearchTree tree2;
+  tree2.Insert(5);
+  tree2.Insert(8);
+  tree2.Insert(10);
+  tree2.Insert(9);
+
+  // Testing the removal of a single child node on the right side of the root node
+  tree2.DeleteRecursively(1);
+  tree2.DeleteRecursively(8);
+  return_node = tree2.Search(5);
+  ASSERT_EQ(return_node->right->data, 10);
+  ASSERT_EQ(return_node->right->left->data, 9);
+  tree2.DeleteRecursively(10);
+  return_node = tree2.Search(5);
+  ASSERT_EQ(return_node->right->data,9);
+  tree2.DeleteRecursively(5);
+  return_node = tree2.Search(5);
+  ASSERT_EQ(return_node, nullptr);
+  tree2.PrintLevelOrder();
+}
+
+TEST(BinarySearchTreeTest, DeleteNodeWithTwoChildrenRecursively){
+  BinarySearchTree tree;
+  tree.Insert(5);
+  tree.Insert(3);
+  tree.Insert(7);
+  tree.Insert(4);
+  tree.Insert(6);
+  tree.Insert(8);
+
+  // Deleting root node
+  /*************************************************
+  *       5                6
+  *     /   \            /   \
+  *    3     7    ==>   3     7
+  *     \   / \          \     \
+  *      4 6   8          4     8
+  *************************************************/
+  tree.DeleteRecursively(5);
+  Node* return_node = tree.Search(6);
+  ASSERT_EQ(return_node->left->data, 3);
+  ASSERT_EQ(return_node->right->data, 7);
+  ASSERT_EQ(return_node->right->left, nullptr); // Test that node deleted properly
+
+  // Delete node from right side of the tree
+  BinarySearchTree tree2;
+  tree2.Insert(10);
+  tree2.Insert(3);
+  tree2.Insert(15);
+  tree2.Insert(1);
+  tree2.Insert(4);
+  tree2.Insert(2);
+  tree2.Insert(5);
+  tree2.Insert(11);
+  tree2.Insert(20);
+  tree2.Insert(16);
+  tree2.Insert(18);
+  tree2.Insert(21);
+  tree2.Insert(17);
+  tree2.Insert(19);
+
+  tree2.DeleteRecursively(15);
+  return_node = tree2.Search(16);
+  ASSERT_EQ(return_node->left->data, 11);
+  ASSERT_EQ(return_node->right->data, 20);
+  ASSERT_EQ(return_node->right->left->data, 18);
+  ASSERT_EQ(return_node->right->left->left->data, 17);
+  ASSERT_EQ(return_node->right->left->right->data, 19);
+
+  // Delete node from left side of the tree
+  ASSERT_EQ(tree2.Delete(3), true);
+  ASSERT_EQ(tree2.Search(3), nullptr);
+  return_node = tree2.Search(4);
+  ASSERT_EQ(return_node->left->data, 1);
+  ASSERT_EQ(return_node->right->data, 5);
+  ASSERT_EQ(return_node->left->right->data, 2);
+
+  // Delete root with only two childre
+  BinarySearchTree tree3;
+  tree3.Insert(5);
+  tree3.Insert(4);
+  tree3.Insert(3);
+  tree3.DeleteRecursively(5);
+  return_node = tree3.Search(4);
+  ASSERT_EQ(return_node->left->data, 3);
+  ASSERT_EQ(return_node->right, nullptr);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
