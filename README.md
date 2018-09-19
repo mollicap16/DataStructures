@@ -1,4 +1,4 @@
-This is a personal implementation of common data structures. The following data structures have been implemented:
+This is a personal implementation of common data structures. The following data structures have been implemented:\n
   Linked List
   Stack
   Queue
