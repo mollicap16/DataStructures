@@ -1,4 +1,4 @@
-#include <BinarySearchTree.h>
+#include <binary_search_tree.h>
 #include <iostream>
 #include <queue>
 #include <limits>

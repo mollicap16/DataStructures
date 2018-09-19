@@ -33,12 +33,16 @@ set_target_properties(libgmock PROPERTIES
 include_directories("${source_dir}/googletest/include"
 "${source_dir}/googlemock/include")
 
-file(GLOB SRC *.cpp)
+#file(GLOB SRC *.cc)
 
-add_executable(BinarySearchTreeTest ${SRC})
+add_executable(BinarySearchTreeTest binary_search_tree_test.cc)
+add_executable(RedBlackTreeTest red_black_tree_test.cc)
 
 # TODO: Install Libraries and target link
 target_link_libraries(BinarySearchTreeTest libgtest libgmock Trees)
+target_link_libraries(RedBlackTreeTest libgtest libgmock Trees)
 
 add_test(NAME BinarySearchTreeTest
          COMMAND BinarySearchTreeTest)
+add_test(NAME RedBlackTreeTest
+         COMMAND RedBlackTreeTest)

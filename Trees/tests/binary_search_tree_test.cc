@@ -1,6 +1,6 @@
 #include <iostream>
 #include <gtest/gtest.h>
-#include <BinarySearchTree.h>
+#include <binary_search_tree.h>
 
 TEST(BinarSearchTreeTest, TestSearchNull){
   BinarySearchTree tree;

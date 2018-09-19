@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -pedantic -pthread
 set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB INC "include/*.h")
-file(GLOB SRC "src/*.cpp")
+file(GLOB SRC "src/*.cc")
 
 add_library(${PROJECT_NAME} ${INC} ${SRC})
 add_subdirectory(tests)
