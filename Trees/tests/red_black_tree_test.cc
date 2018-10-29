@@ -27,7 +27,6 @@ TEST(RedBlackTreeTest, InsertTest){
   rb_tree.Insert(8);
   rb_tree.Insert(12);
   rb_tree.Insert(7);
-  rb_tree.PrintLevelOrder();
 
   search_node = rb_tree.Search(7);
   ASSERT_EQ(search_node->data, 7);
@@ -300,6 +299,344 @@ TEST(RedBlackTreeTest, InsertFullTest){
   ASSERT_EQ(search_node->right->left->color, NodeColor::kRed);
   ASSERT_EQ(search_node->right->right->data, 29);
   ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+}
+
+TEST(RedBlackTreeTest, DeleteNonExistingItemTest){
+  RedBlackTree rb_tree;
+  rb_tree.Insert(10);
+  rb_tree.Insert(30);
+
+  ASSERT_EQ(rb_tree.Remove(40), false);
+}
+
+TEST(RedBlackTreeTest, DeleteNodeCase1Test){
+  RedBlackTree rb_tree;
+  RedBlackNode* search_node;
+  rb_tree.Insert(50);
+  rb_tree.Insert(30);
+  rb_tree.Insert(70);
+
+  ASSERT_EQ(rb_tree.Remove(50), true);
+  search_node = rb_tree.Search(30);
+
+  ASSERT_EQ(search_node->data, 30);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left, nullptr);
+  ASSERT_EQ(search_node->right->data, 70);
+  ASSERT_EQ(search_node->right->color, NodeColor::kRed);
+
+  rb_tree.Insert(50);
+  rb_tree.Insert(40);
+  rb_tree.Insert(90);
+  rb_tree.Insert(45);
+  rb_tree.Insert(110);
+  rb_tree.Insert(48);
+
+  rb_tree.Remove(50);
+  search_node = rb_tree.Search(48);
+  ASSERT_EQ(search_node->parent, nullptr);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->data, 40);
+  ASSERT_EQ(search_node->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->data, 90);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->left->data, 30);
+  ASSERT_EQ(search_node->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->right->data, 45);
+  ASSERT_EQ(search_node->left->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 70);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->data, 110);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+
+  rb_tree.Remove(90);
+  ASSERT_EQ(search_node->right->data, 70);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->data, 40);
+  ASSERT_EQ(search_node->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->left->left->data, 30);
+  ASSERT_EQ(search_node->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->right->data, 45);
+  ASSERT_EQ(search_node->left->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left, nullptr);
+  ASSERT_EQ(search_node->right->right->data, 110);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+}
+
+TEST(RedBlackTreeTest, DeleteNodeCase2Test){
+  RedBlackTree rb_tree;
+  RedBlackNode* search_node;
+
+  rb_tree.Insert(50);
+  rb_tree.Insert(90);
+  rb_tree.Insert(25);
+  rb_tree.Insert(110);
+  rb_tree.Insert(95);
+  rb_tree.Insert(92);
+  rb_tree.Insert(85);
+  rb_tree.Insert(80);
+  rb_tree.Insert(120);
+  rb_tree.Insert(125);
+  rb_tree.Insert(130);
+  rb_tree.Insert(100);
+  rb_tree.Insert(93);
+
+  rb_tree.Remove(95);
+  search_node = rb_tree.Search(90);
+  ASSERT_EQ(search_node->parent, nullptr);
+  ASSERT_EQ(search_node->right->data, 93);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 92);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->data, 120);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->left->data, 110);
+  ASSERT_EQ(search_node->right->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->right->data, 125);
+  ASSERT_EQ(search_node->right->right->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->left->left->data, 100);
+  ASSERT_EQ(search_node->right->right->left->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->right->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->left->right, nullptr);
+
+  rb_tree.Remove(120);
+  ASSERT_EQ(search_node->right->data, 93);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 92);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->data, 110);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->left->data, 100);
+  ASSERT_EQ(search_node->right->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->right->data, 125);
+  ASSERT_EQ(search_node->right->right->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->right->right->color, NodeColor::kRed);
+
+  rb_tree.Remove(90);
+  search_node = rb_tree.Search(85);
+  ASSERT_EQ(search_node->parent, nullptr);
+  ASSERT_EQ(search_node->left->data, 50);
+  ASSERT_EQ(search_node->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->data, 93);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->left->data, 25);
+  ASSERT_EQ(search_node->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->right->data, 80);
+  ASSERT_EQ(search_node->left->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 92);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->data, 110);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->left->data, 100);
+  ASSERT_EQ(search_node->right->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->right->data, 125);
+  ASSERT_EQ(search_node->right->right->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->right->right->color, NodeColor::kRed);
+
+  rb_tree.Remove(125);
+  ASSERT_EQ(search_node->parent, nullptr);
+  ASSERT_EQ(search_node->left->data, 50);
+  ASSERT_EQ(search_node->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->data, 93);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 92);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->data, 110);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->left->data, 100);
+  ASSERT_EQ(search_node->right->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->right->color, NodeColor::kBlack);
+
+}
+
+TEST(RedBlackTreeTest, DeleteNodeCase3Test){
+  RedBlackTree rb_tree;
+  RedBlackNode* search_node;
+
+  rb_tree.Insert(90);
+  rb_tree.Insert(50);
+  rb_tree.Insert(95);
+  rb_tree.Insert(25);
+  rb_tree.Insert(85);
+  rb_tree.Insert(80);
+  rb_tree.Insert(92);
+  rb_tree.Insert(120);
+  rb_tree.Insert(110);
+  rb_tree.Insert(125);
+  rb_tree.Insert(100);
+  rb_tree.Insert(93);
+  rb_tree.Insert(70);
+  rb_tree.Insert(130);
+  rb_tree.Insert(123);
+
+  // Delete black leaf node
+  rb_tree.Remove(25);
+  search_node = rb_tree.Search(90);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->data, 80);
+  ASSERT_EQ(search_node->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->left->data, 50);
+  ASSERT_EQ(search_node->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->right->data, 85);
+  ASSERT_EQ(search_node->left->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->left->right->data, 70);
+  ASSERT_EQ(search_node->left->left->right->color, NodeColor::kRed);
+
+  rb_tree.Remove(95);
+  rb_tree.Remove(93);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->data, 120);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 100);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->left->left->data, 92);
+  ASSERT_EQ(search_node->right->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->right->data, 110);
+  ASSERT_EQ(search_node->right->left->right->color, NodeColor::kBlack);
+
+  rb_tree.Remove(90);
+  search_node = rb_tree.Search(85);
+  ASSERT_EQ(search_node->data, 85);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->data, 70);
+  ASSERT_EQ(search_node->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->data, 120);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->right->data, 80);
+  ASSERT_EQ(search_node->left->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->left->data, 50);
+  ASSERT_EQ(search_node->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 100);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->data, 125);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->left->data, 92);
+  ASSERT_EQ(search_node->right->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->right->data, 110);
+  ASSERT_EQ(search_node->right->left->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->left->data, 123);
+  ASSERT_EQ(search_node->right->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->right->color, NodeColor::kRed);
+
+  rb_tree.Remove(92);
+  rb_tree.Remove(70);
+  ASSERT_EQ(search_node->data, 85);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->data, 50);
+  ASSERT_EQ(search_node->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->right->data, 80);
+  ASSERT_EQ(search_node->left->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->left->left, nullptr);
+  ASSERT_EQ(search_node->right->data, 120);
+  ASSERT_EQ(search_node->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->left->data, 100);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->data, 125);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->right->data, 110);
+  ASSERT_EQ(search_node->right->left->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->left->left, nullptr);
+  ASSERT_EQ(search_node->right->right->left->data, 123);
+  ASSERT_EQ(search_node->right->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->right->color, NodeColor::kRed);
+
+  // Remove a case that isn't there
+  ASSERT_EQ(rb_tree.Remove(1), false);
+
+  // Add some more values to test that we can remove and add
+  rb_tree.Insert(92);
+  rb_tree.Insert(90);
+  search_node = rb_tree.Search(100);
+  ASSERT_EQ(search_node->data, 100);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->data, 85);
+  ASSERT_EQ(search_node->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->data, 120);
+  ASSERT_EQ(search_node->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->left->left->data, 50);
+  ASSERT_EQ(search_node->left->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->right->data, 92);
+  ASSERT_EQ(search_node->left->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 110);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->right->data, 125);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->left->left, nullptr);
+  ASSERT_EQ(search_node->left->left->right->data, 80);
+  ASSERT_EQ(search_node->left->left->right->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->left->right->left->data, 90);
+  ASSERT_EQ(search_node->left->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->left->right->right, nullptr);
+  ASSERT_EQ(search_node->right->left->left, nullptr);
+  ASSERT_EQ(search_node->right->left->right, nullptr);
+  ASSERT_EQ(search_node->right->right->left->data, 123);
+  ASSERT_EQ(search_node->right->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->right->color, NodeColor::kRed);
+
+  rb_tree.Remove(50);
+  rb_tree.Remove(80);
+  rb_tree.Remove(85);
+  rb_tree.Remove(90);
+  rb_tree.Remove(92);
+  rb_tree.Remove(120);
+  search_node = rb_tree.Search(110);
+  ASSERT_EQ(search_node->data, 110);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left->data, 100);
+  ASSERT_EQ(search_node->left->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->data, 125);
+  ASSERT_EQ(search_node->right->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->right->left->data, 123);
+  ASSERT_EQ(search_node->right->left->color, NodeColor::kRed);
+  ASSERT_EQ(search_node->right->right->data, 130);
+  ASSERT_EQ(search_node->right->right->color, NodeColor::kRed);
+
+  rb_tree.Remove(100);
+  rb_tree.Remove(125);
+  rb_tree.Remove(123);
+
+  search_node = rb_tree.Search(110);
+  ASSERT_EQ(search_node->data, 110);
+  ASSERT_EQ(search_node->color, NodeColor::kBlack);
+  ASSERT_EQ(search_node->left, nullptr);
+  ASSERT_EQ(search_node->right->data, 130);
+  ASSERT_EQ(search_node->right->color, NodeColor::kRed);
+  ASSERT_EQ(rb_tree.IsEmpty(), false);
+  rb_tree.Remove(110);
+  rb_tree.Remove(130);
+  ASSERT_EQ(rb_tree.IsEmpty(), true);
+}
+
+TEST(RedBlackTreeTest, PrintTests){
+  RedBlackTree rb_tree;
+
+  rb_tree.Insert(90);
+  rb_tree.Insert(50);
+  rb_tree.Insert(95);
+  rb_tree.Insert(25);
+  rb_tree.Insert(85);
+  rb_tree.Insert(80);
+  rb_tree.Insert(92);
+  rb_tree.Insert(120);
+  rb_tree.Insert(110);
+  rb_tree.Insert(125);
+  rb_tree.Insert(100);
+  rb_tree.Insert(93);
+  rb_tree.Insert(70);
+  rb_tree.Insert(130);
+  rb_tree.Insert(123);
+
+  rb_tree.PrintLevelOrder();
+  rb_tree.PrintPreorder();
+  rb_tree.PrintInorder();
+  rb_tree.PrintPostorder();
 }
 
 int main(int argc, char **argv) {
