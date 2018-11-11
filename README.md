@@ -5,6 +5,7 @@ This is a personal implementation of common data structures. The following data 
     Heap  
     Binary Search Tree  
     Red Black Tree  
+    Hash Table  
   
 NOTE: Each folder, at the top level of this main project, is a self contained project and is intented to be run individually.  
 
