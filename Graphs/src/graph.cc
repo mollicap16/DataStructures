@@ -79,10 +79,10 @@ void Graph::Unweighted(const std::string &start_name){
 
   ClearAll();
 
-  Vertex* start = (*itr).second;
+  Vertex* start_vertex = (*itr).second;
   std::list<Vertex* > queue;
-  queue.push_back(start);
-  start->distance_ = 0;
+  queue.push_back(start_vertex);
+  start_vertex->distance_ = 0;
 
   // BFS Search and calculating shortest path distances for each Vertex
   while (!queue.empty()) {
@@ -131,8 +131,8 @@ void Graph::Dijkstra(const std::string& start_name){
     Vertex* v = vrec.dest_;
     v->scratch_ = 1;
 
-    for(auto i=v->adj_list_.begin(); i < v->adj_list_.end(); ++i){
-      Edge edge = *i;
+    for(auto itr=v->adj_list_.begin(); itr < v->adj_list_.end(); ++itr){
+      Edge edge = *itr;
       Vertex* w = edge.dest_;
       double vw_edge_cost = edge.cost_;
 
@@ -152,3 +152,49 @@ void Graph::Dijkstra(const std::string& start_name){
   }
 }
 
+// This function uses the Bellman-Ford algorithm for negative-weighted graphs
+bool Graph::Negative(const std::string& start_name){
+  vmap::iterator itr = VertexMap.find(start_name);
+  if (itr == VertexMap.end()){
+    std::cout << "ERROR: " << start_name << " is not a vertex in the graph." << std::endl;
+    return false;
+  }
+
+  ClearAll();
+  Vertex* start_vertex = (*itr).second;
+  std::list<Vertex*> queue;
+  queue.push_back(start_vertex);
+  start_vertex->distance_ = 0;
+  start_vertex->scratch_++;
+
+  while(!queue.empty()){
+    Vertex* v = queue.front();
+    queue.pop_front();
+
+    double vertex_map_size = VertexMap.size();
+    if (v->scratch_++ > 2 * vertex_map_size){
+      std::cout << "ERROR: Negative Cycle Detected!" << std::endl;
+      return false;
+    }
+
+    for(auto itr = v->adj_list_.begin(); itr < v->adj_list_.end(); ++itr){
+      Edge edge = *itr;
+      Vertex* w = edge.dest_;
+      double vw_edge_cost = edge.cost_;
+
+      // Negative Update rule
+      if(w->distance_ > v->distance_ + vw_edge_cost){
+        w->distance_ = v->distance_ + vw_edge_cost;
+        w->prev_ = v;
+        // Enqueue only if not already on the queue.
+        if (w->scratch_++ % 2 == 0){
+          queue.push_back(w);
+        } else {
+          w->scratch_++;
+        }
+      }
+    }
+  }
+
+  return true;
+}

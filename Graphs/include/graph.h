@@ -25,7 +25,7 @@ struct Edge {
   Vertex* dest_;      // Destination Vertex
   double cost_;       // Cost of the Edge
 
-  Edge(Vertex* dest, double cost)
+  Edge(Vertex* dest = 0, double cost = 0.0)
     : dest_(dest), cost_(cost){}
 };
 
@@ -69,8 +69,9 @@ public:
   void PrintPath(const std::string& dest_name) const;
   void Unweighted(const std::string& start_name); // Unweighted shortest-path algorithm (BFS)
   void Dijkstra(const std::string& start_name);   // Dijkstra's shortest-path algorithm
-  void Negative();   // Negatvie weighted shortest-path algorithm
-  void Acyclic();    // Acyclic shortest-path algorithm
+  // This function returns true if there isn't a negative cost cycle and the start node is in the graph
+  bool Negative(const std::string& start_name);   // Negatvie weighted shortest-path algorithm
+  void Acyclic();                                 // Acyclic shortest-path algorithm
   Vertex* GetVertex(const std::string& vertex_name);
 
 private:
