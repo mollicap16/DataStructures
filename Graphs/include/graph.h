@@ -43,6 +43,23 @@ struct Vertex {
     {distance_ = std::numeric_limits<double>::max(); prev_ = nullptr; scratch_ = 0;}
 };
 
+// This path structure is the structure we use for the priority queue in Dijkstra's algorithm
+struct Path {
+  Vertex* dest_;  // node w
+  double cost_;   // D(w)
+
+  Path(Vertex* dest = 0, double cost = 0.0)
+    : dest_(dest), cost_(cost) {}
+
+  // Overload operators for priority queue
+  bool operator > (const Path& rhs) const {
+    return cost_ > rhs.cost_;
+  }
+  bool operator < (const Path& rhs) const {
+    return cost_ < rhs.cost_;
+  }
+};
+
 class Graph {
 public:
   Graph();
@@ -50,8 +67,8 @@ public:
 
   void AddEdge (const std::string& source_name, const std::string& dest_name, double cost);
   void PrintPath(const std::string& dest_name) const;
-  void Unweighted(const std::string &start_name); // Unweighted shortest-path algorithm (BFS)
-  void Dijkstra();   // Dijkstra's shortest-path algorithm
+  void Unweighted(const std::string& start_name); // Unweighted shortest-path algorithm (BFS)
+  void Dijkstra(const std::string& start_name);   // Dijkstra's shortest-path algorithm
   void Negative();   // Negatvie weighted shortest-path algorithm
   void Acyclic();    // Acyclic shortest-path algorithm
   Vertex* GetVertex(const std::string& vertex_name);

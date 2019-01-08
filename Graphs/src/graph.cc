@@ -101,3 +101,54 @@ void Graph::Unweighted(const std::string &start_name){
     }
   }
 }
+
+void Graph::Dijkstra(const std::string& start_name){
+  std::priority_queue<Path, std::vector<Path>, std::greater<Path> > priority_queue;
+  Path vrec;
+
+  vmap::iterator itr = VertexMap.find(start_name);
+  if (itr == VertexMap.end()){
+    std::cout << "ERROR: " << start_name << " is not a vertex in the graph." << std::endl;
+    return;
+  }
+
+  ClearAll();
+  Vertex* start = (*itr).second;
+  priority_queue.push(Path(start, 0.0));
+  start->distance_ = 0.0;
+
+  int32_t vertex_map_size = VertexMap.size();
+  for(int32_t nodes_seen = 0; nodes_seen < vertex_map_size; nodes_seen++){
+    // Find an unvisted vertex
+    do
+    {
+      if (priority_queue.empty())
+        return;
+      vrec = priority_queue.top();
+      priority_queue.pop();
+    } while ( vrec.dest_->scratch_ != 0);
+
+    Vertex* v = vrec.dest_;
+    v->scratch_ = 1;
+
+    for(auto i=v->adj_list_.begin(); i < v->adj_list_.end(); ++i){
+      Edge edge = *i;
+      Vertex* w = edge.dest_;
+      double vw_edge_cost = edge.cost_;
+
+      if (vw_edge_cost < 0){
+        std::cout << "ERROR: Negative Edge Cost Detected!" << std::endl;
+        return;
+      }
+
+      // Update rule for Dijkstra's algorithm
+      if (w->distance_ > v->distance_ + vw_edge_cost){
+        w->distance_ = v->distance_ + vw_edge_cost;
+        w->prev_ = v;
+        // push the updated shortest path onto the priority queue
+        priority_queue.push(Path(w, w->distance_));
+      }
+    }
+  }
+}
+
