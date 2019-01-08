@@ -198,3 +198,64 @@ bool Graph::Negative(const std::string& start_name){
 
   return true;
 }
+
+void Graph::Acyclic(const std::string& start_name){
+  // This function is using a topological sort algorithm for acyclic graphs
+  vmap::iterator itr = VertexMap.find(start_name);
+  if (itr == VertexMap.end()){
+    std::cout << "ERROR: " << start_name << " is not a vertex in the graph." << std::endl;
+    return;
+  }
+
+  ClearAll();
+  Vertex* start = (*itr).second;
+  start->distance_ = 0;
+  std::list<Vertex*> queue;
+
+  // Compute all of the vertices indegrees. NOTE: we use the scratch variable for the indegree
+  for (itr = VertexMap.begin(); itr != VertexMap.end(); ++itr){
+    Vertex* v = (*itr).second;
+    int32_t adj_list_size = v->adj_list_.size();
+    for (int32_t i = 0; i < adj_list_size; ++i){
+      v->adj_list_[i].dest_->scratch_++;
+    }
+  }
+
+  // Enqueue Vertices of indegree zero.
+  for (itr = VertexMap.begin(); itr != VertexMap.end(); ++itr){
+    Vertex* v = (*itr).second;
+    if(v->scratch_ == 0)
+      queue.push_back(v);
+  }
+
+  int32_t iterations = 0;
+  int32_t vertex_map_size = VertexMap.size();
+  while (!queue.empty()){
+    Vertex* v = queue.front();
+    queue.pop_front();
+
+    int32_t adj_list_size = v->adj_list_.size();
+    for (int32_t i = 0; i < adj_list_size; ++i){
+      Edge edge = v->adj_list_[i];
+      Vertex* w = edge.dest_;
+
+      if (--w->scratch_ == 0){
+        queue.push_back(w);
+      }
+      if (v->distance_ != std::numeric_limits<double>::max()){
+        double vw_edge_cost = edge.cost_;
+        if(w->distance_ > v->distance_ + vw_edge_cost){
+          w->distance_ = v->distance_ + vw_edge_cost;
+          w->prev_ = v;
+        }
+      }
+
+    }
+
+    iterations++;
+  }
+  if(iterations != vertex_map_size){
+    std::cout << "ERROR: Graph has a cycle!" << std::endl;
+  }
+
+}

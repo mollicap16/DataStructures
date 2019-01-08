@@ -71,7 +71,7 @@ public:
   void Dijkstra(const std::string& start_name);   // Dijkstra's shortest-path algorithm
   // This function returns true if there isn't a negative cost cycle and the start node is in the graph
   bool Negative(const std::string& start_name);   // Negatvie weighted shortest-path algorithm
-  void Acyclic();                                 // Acyclic shortest-path algorithm
+  void Acyclic(const std::string& start_name);                                 // Acyclic shortest-path algorithm
   Vertex* GetVertex(const std::string& vertex_name);
 
 private:
