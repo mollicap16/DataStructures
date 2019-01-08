@@ -48,15 +48,15 @@ public:
   Graph();
   ~Graph();
 
-  void AddEdge (const std::string& source_name, std::string& dest_name, double cost);
+  void AddEdge (const std::string& source_name, const std::string& dest_name, double cost);
   void PrintPath(const std::string& dest_name) const;
-  void Unweighted(); // Unweighted shortest-path algorithm (BFS)
+  void Unweighted(const std::string &start_name); // Unweighted shortest-path algorithm (BFS)
   void Dijkstra();   // Dijkstra's shortest-path algorithm
   void Negative();   // Negatvie weighted shortest-path algorithm
   void Acyclic();    // Acyclic shortest-path algorithm
+  Vertex* GetVertex(const std::string& vertex_name);
 
 private:
-  Vertex* GetVertex(const std::string& vertex_name);
   void PrintPath(const Vertex& dest) const;
   void ClearAll();
 
